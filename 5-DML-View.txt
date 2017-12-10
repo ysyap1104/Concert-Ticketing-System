@@ -1,0 +1,25 @@
+CREATE VIEW TicketPurchasedLocation AS
+	SELECT TICKET.Trans_No, CASHIER.Cashier_ID, CASHIER.Cashier_FirstName, CASHIER.Location_ID, SALES_LOCATION.Location_Description
+	FROM TICKET,CUSTOMER,CASHIER,SALES_LOCATION
+	WHERE TICKET.Customer_ID=CUSTOMER.Customer_ID
+	AND CUSTOMER.Cashier_ID=CASHIER.Cashier_ID
+	AND CASHIER.Location_ID=SALES_LOCATION.Location_ID@
+
+
+CREATE VIEW Ticket_Venue AS
+	SELECT Trans_No,Venue_Description FROM TICKET,CONCERT_SHOWING,VENUE
+	WHERE TICKET.Concert_Code = CONCERT_SHOWING.Concert_Code AND
+	CONCERT_SHOWING.Venue_Code = VENUE.Venue_Code@
+
+
+CREATE VIEW Ticket_Seat AS
+	SELECT Trans_No, Seat_No, Area_Code
+	FROM TICKET @
+
+
+CREATE VIEW ConcertVenue_View AS
+	SELECT Concert_Title, Concert_Date, Venue_Description
+	FROM CONCERT_SHOWING, VENUE
+	WHERE CONCERT_SHOWING.Venue_Code=Venue.Venue_Code@
+
+

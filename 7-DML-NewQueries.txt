@@ -1,0 +1,41 @@
+CREATE PROCEDURE UpdateRefund(IN Code varchar(7))
+BEGIN
+IF(DAY((SELECT Concert_Date FROM CONCERT_SHOWING WHERE 	CONCERT_SHOWING.Concert_Code=Code) 
+	- (SELECT current date FROM sysibm.sysdummy1)) < 7 ) THEN
+	UPDATE TICKET
+	SET Ticket_Refundable='Not available'
+	WHERE TICKET.Concert_Code=Code;
+ELSE
+	UPDATE TICKET
+	SET Ticket_Refundable='Available'
+	WHERE TICKET.Concert_Code=Code;
+END IF;
+END@
+
+
+CREATE TABLE SALES_LOCATION(
+	Location_ID integer NOT NULL GENERATED ALWAYS AS IDENTITY,
+	Location_Description varchar(20) NOT NULL,
+	Location_City varchar(20),
+	Location_State	varchar(20),
+	Location_PostCode varchar(5) ,
+	PRIMARY KEY(Location_ID),
+	CONSTRAINT Location_Unq UNIQUE(Location_Description)
+);
+
+
+SELECT Customer.Cashier_ID ,Cashier_FirstName,Cashier_LastName,COUNT(Customer.Cashier_ID) AS CustomerServed FROM CUSTOMER,Cashier
+WHERE Customer.Cashier_ID = Cashier.Cashier_ID
+GROUP BY Customer.Cashier_ID,Cashier_FirstName,Cashier_LastName
+ORDER BY COUNT(Customer.Cashier_ID) DESC
+FETCH FIRST 5 ROWS ONLY @
+
+
+
+
+
+
+
+
+
+------End------

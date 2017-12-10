@@ -1,0 +1,27 @@
+CREATE PROCEDURE InsertTicket(IN Trans_No varchar(8),Code varchar(7),Seat_No varchar(6),Area_Code varchar(3),Customer_ID varchar(6),Purchased_Date date, Purchased_Time time,Ticket_Type varchar(20))
+BEGIN
+IF (Purchased_Date<=(SELECT Concert_Date FROM CONCERT_SHOWING WHERE CONCERT_SHOWING.Concert_Code=Code)
+    AND	Purchased_Time<=(SELECT Concert_EndTime FROM CONCERT_SHOWING WHERE CONCERT_SHOWING.Concert_Code=Code )) THEN
+	INSERT INTO TICKET (Trans_No,Concert_Code, Seat_No, Area_Code, Customer_ID,Purchased_Date,Purchased_Time , Ticket_Type)
+	VALUES(Trans_No,Code, Seat_No, Area_Code, Customer_ID, Purchased_Date, Purchased_Time, Ticket_Type);
+ELSE
+	SIGNAL SQLSTATE '78001'
+        SET MESSAGE_TEXT='The concert you purchase is over. ';
+END IF;
+END@
+
+
+
+CREATE PROCEDURE UpdateRefund(IN Code varchar(7))
+BEGIN
+IF(DAY((SELECT Concert_Date FROM CONCERT_SHOWING WHERE CONCERT_SHOWING.Concert_Code=Code) -(SELECT current date FROM sysibm.sysdummy1)) < 7 ) THEN
+	UPDATE TICKET
+	SET Ticket_Refundable='Not available'
+	WHERE TICKET.Concert_Code=Code;
+ELSE
+	UPDATE TICKET
+	SET Ticket_Refundable='Available'
+	WHERE TICKET.Concert_Code=Code;
+END IF;
+END@
+

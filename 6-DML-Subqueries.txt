@@ -1,0 +1,16 @@
+SELECT Concert_Code , Concert_Title 
+FROM CONCERT_SHOWING
+WHERE NOT EXISTS (SELECT Concert_Code 
+	          FROM Ticket 
+		  WHERE Ticket.Concert_Code = Concert_Showing.Concert_Code)@
+
+
+
+
+SELECT Concert_Code , Concert_Title 
+FROM CONCERT_SHOWING
+WHERE EXISTS (SELECT Concert_Code 
+   	      FROM Ticket
+              WHERE Ticket.Concert_Code = Concert_Showing.Concert_Code)@
+
+

@@ -1,0 +1,27 @@
+CREATE TRIGGER trg_CalcPrice
+AFTER INSERT ON TICKET
+REFERENCING NEW AS N
+FOR EACH ROW mode db2sql
+	UPDATE TICKET
+	SET Discounted_Price=
+	CASE
+		WHEN Ticket_Type='Adult'
+			then (SELECT Price FROM AREA WHERE Area.Area_Code=N.Area_Code)
+		WHEN Ticket_Type='Children'
+			then (SELECT Price FROM AREA WHERE Area.Area_Code=N.Area_Code) * 0.80
+	END
+	WHERE Trans_No=N.Trans_No@
+
+
+
+CREATE TRIGGER trg_DropTicket
+AFTER DELETE ON TICKET
+REFERENCING OLD AS O
+FOR EACH ROW MODE db2sql
+BEGIN
+IF ((SELECT COUNT(Customer_ID) FROM TICKET WHERE Customer_ID=O.Customer_ID) =0) THEN
+	DELETE FROM CUSTOMER
+	WHERE Customer_ID = O.Customer_ID;
+END IF ;
+END@
+

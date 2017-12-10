@@ -1,0 +1,64 @@
+SELECT Customer_ID, COUNT(Trans_No) AS Number_Of_Ticket
+FROM TICKET
+GROUP BY Customer_ID@
+
+
+SELECT Customer_ID, SUM(Discounted_Price) AS Total_Price
+FROM TICKET
+GROUP BY Customer_ID@
+
+
+SELECT Customer_ID, SUM(Discounted_Price) AS Total_Price
+FROM TICKET
+GROUP BY Customer_ID
+HAVING SUM(Discounted_Price) < 300@
+
+
+SELECT SEAT.Area_Code, Area_Description, COUNT(Seat_No) AS Number_Of_Seat
+FROM SEAT,AREA
+WHERE AREA.Area_Code=SEAT.Area_Code
+GROUP BY SEAT.Area_Code, AREA.Area_Description@
+
+
+SELECT TICKET.Concert_Code,CONCERT_SHOWING.Concert_Title,SUM(Discounted_Price) AS Total_Income
+FROM TICKET,CONCERT_SHOWING
+WHERE TICKET.Concert_Code=CONCERT_SHOWING.Concert_Code
+GROUP BY TICKET.Concert_Code,CONCERT_SHOWING.Concert_Title@
+
+
+SELECT CONCERT_SHOWING.Venue_Code, Venue_Description, COUNT(Concert_Code) AS Total_Concert
+FROM VENUE,CONCERT_SHOWING
+WHERE VENUE.Venue_Code=CONCERT_SHOWING.Venue_Code
+GROUP BY CONCERT_SHOWING.Venue_Code, VENUE.Venue_Description@
+
+
+SELECT TICKET.Concert_Code, Concert_Title, COUNT(Trans_No) AS Number_Of_Adult
+FROM TICKET,CONCERT_SHOWING
+WHERE TICKET.Concert_Code=CONCERT_SHOWING.Concert_Code
+AND Ticket_Type='Adult'
+GROUP BY TICKET.Concert_Code, CONCERT_SHOWING.Concert_Title@
+
+
+SELECT TICKET.Concert_Code, Concert_Title, COUNT(Trans_No) AS Number_Of_Children
+FROM TICKET,CONCERT_SHOWING
+WHERE TICKET.Concert_Code=CONCERT_SHOWING.Concert_Code
+AND Ticket_Type='Children'
+GROUP BY TICKET.Concert_Code, CONCERT_SHOWING.Concert_Title@
+
+
+SELECT CONCERT_SHOWING.Concert_Code, CONCERT_SHOWING.Concert_Title, TICKET.Purchased_Date, COUNT(Trans_No) AS Total_Tickets
+FROM TICKET,CONCERT_SHOWING
+WHERE TICKET.Concert_Code=CONCERT_SHOWING.Concert_Code
+GROUP BY CONCERT_SHOWING.Concert_Code,TICKET.Purchased_Date,CONCERT_SHOWING.Concert_Title
+Order by TICKET.Purchased_Date@
+
+
+
+
+
+
+
+
+
+
+

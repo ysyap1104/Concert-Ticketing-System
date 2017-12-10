@@ -1,0 +1,24 @@
+CREATE FUNCTION getIncomeConcert(ConcertCode varchar(7))
+RETURNS TABLE(Concert_Code varchar(7), Concert_Title varchar(20), discounted_Price decimal(20,2) )
+RETURN
+	SELECT TICKET.Concert_Code, CONCERT_SHOWING.Concert_Title, SUM(Discounted_Price) AS Total_Income
+	FROM TICKET, CONCERT_SHOWING
+	WHERE TICKET.Concert_Code=CONCERT_SHOWING.Concert_Code
+	AND TICKET.Concert_Code=ConcertCode
+	GROUP BY TICKET.Concert_Code, CONCERT_SHOWING.Concert_Title@   
+
+                            
+SELECT Area_Code, Area_Description, Price
+FROM AREA
+WHERE Price=(SELECT MAX(Price) FROM AREA)@
+
+//Area which has the lowest price 
+                                 
+SELECT Area_Code, Area_Description, Price 
+FROM AREA
+WHERE Price=(SELECT MIN(Price) FROM AREA)@
+
+
+
+
+
